@@ -11,6 +11,8 @@ public sealed class GameManager : MonoBehaviour
     public Text scoreText;
     public Text livesText;
 
+    public Transform[] toggleOnGO;
+
     public int score { get; private set; }
     public int lives { get; private set; }
     
@@ -28,6 +30,7 @@ public sealed class GameManager : MonoBehaviour
         player.killed += OnPlayerKilled;
         bonusShip.killed += OnBonusShipKilled;
         enemyController.killed += OnEnemyKilled;
+        enemyController.IncorrectHit += OnEnemyIncorrectlyHit;
 
         NewGame();
     }
@@ -45,6 +48,11 @@ public sealed class GameManager : MonoBehaviour
     private void NewGame()
     {
         gameOverUI.SetActive(false);
+
+        foreach (Transform item in toggleOnGO)
+        {
+            item.gameObject.SetActive(true);
+        }
 
         SetScore(0);
         SetLives(3);
@@ -66,14 +74,19 @@ public sealed class GameManager : MonoBehaviour
         Vector3 position = player.transform.position;
         position.x = 0f;
         player.transform.position = position;
+        player.Health = 100;
         player.gameObject.SetActive(true);
     }
 
     // activate game over gui and disable game
     private void GameOver()
     {
+        foreach (Transform item in toggleOnGO)
+        {
+            item.gameObject.SetActive(false);
+        }
+
         gameOverUI.SetActive(true);
-        enemyController.gameObject.SetActive(false);
     }
 
     // Sets the score text
@@ -116,6 +129,11 @@ public sealed class GameManager : MonoBehaviour
     private void OnBonusShipKilled(BonusShip bonusShip)
     {
         SetScore(score + bonusShip.score);
+    }
+
+    private void OnEnemyIncorrectlyHit(Enemy enemy)
+    {
+        SetScore(score - (enemy.score / 2));
     }
 
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float speed = 30f;
+    public int LaserType = 0;
     public Vector3 direction = Vector3.up;
     public System.Action<Projectile> destroyed;
 

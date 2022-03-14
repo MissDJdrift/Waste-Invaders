@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -4447578080803963419}
   - component: {fileID: 8922502034929116585}
   - component: {fileID: 1551307908973724939}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: Enemy 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,3 +147,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
+  EnemyType: 2

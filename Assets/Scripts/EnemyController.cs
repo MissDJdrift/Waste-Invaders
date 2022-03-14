@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour
     public Vector3 direction { get; private set; } = Vector3.right;
     public Vector3 initialPos { get; private set; }
     public System.Action<Enemy> killed;
+    public System.Action<Enemy> IncorrectHit;
 
     public int NumberKilled { get; private set; }
     public int NumberAlive => TotalEnemies - NumberKilled;
@@ -36,6 +37,7 @@ public class EnemyController : MonoBehaviour
             {
                 Enemy enemy = Instantiate(prefabs[i], transform);
                 enemy.killed += EnemyDeath;
+                enemy.IncorrectHit += IncorrectlyHit;
 
                 Vector3 pos = rowPosition;
                 pos.x += HorizontalSpacing * j;
@@ -94,6 +96,12 @@ public class EnemyController : MonoBehaviour
         enemy.gameObject.SetActive(false);
         NumberKilled++;
         killed(enemy);
+    }
+
+    private void IncorrectlyHit(Enemy enemy)
+    {
+        player.IncorrectHit();
+        IncorrectHit(enemy);
     }
 
     // Reset enemies
