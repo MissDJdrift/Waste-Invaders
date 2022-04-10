@@ -151,49 +151,49 @@ public class Player : MonoBehaviour
 
             if (hitEnemy == 0)
             {
-                neededWeaponText.text = "Disposal Type 1";
+                neededWeaponText.text = "Plastic Type 1: PET";
                 //neededWeaponNumberText.text = "1";
                 neededWeaponImage.sprite = neededWeaponImages[1];
             }
             else if (hitEnemy == 1)
             {
-                neededWeaponText.text = "Disposal Type 2";
+                neededWeaponText.text = "Plastic Type 2: HDPE";
                 //neededWeaponNumberText.text = "2";
                 neededWeaponImage.sprite = neededWeaponImages[2];
             }
             else if (hitEnemy == 2)
             {
-                neededWeaponText.text = "Disposal Type 3";
+                neededWeaponText.text = "Plastic Type 3: PVC";
                 //neededWeaponNumberText.text = "3";
                 neededWeaponImage.sprite = neededWeaponImages[3];
             }
             else if (hitEnemy == 3)
             {
-                neededWeaponText.text = "Disposal Type 4";
+                neededWeaponText.text = "Plastic Type 4: LDPE";
                 //neededWeaponNumberText.text = "4";
                 neededWeaponImage.sprite = neededWeaponImages[4];
             }
             else if (hitEnemy == 4)
             {
-                neededWeaponText.text = "Disposal Type 5";
+                neededWeaponText.text = "Plastic Type 5: PP";
                 //neededWeaponNumberText.text = "5";
                 neededWeaponImage.sprite = neededWeaponImages[5];
             }
             else if (hitEnemy == 5)
             {
-                neededWeaponText.text = "Disposal Type 6";
+                neededWeaponText.text = "Plastic Type 6: PS";
                 //neededWeaponNumberText.text = "6";
                 neededWeaponImage.sprite = neededWeaponImages[6];
             }
             else if (hitEnemy == 6)
             {
-                neededWeaponText.text = "Disposal Type 7";
+                neededWeaponText.text = "Plastic Type 7";
                 //neededWeaponNumberText.text = "7";
                 neededWeaponImage.sprite = neededWeaponImages[7];
             }
             else if (hitEnemy == 7)
             {
-                neededWeaponText.text = "Disposal Type Trash";
+                neededWeaponText.text = "Trash";
                 //neededWeaponNumberText.text = "8";
                 neededWeaponImage.sprite = neededWeaponImages[8];
             }

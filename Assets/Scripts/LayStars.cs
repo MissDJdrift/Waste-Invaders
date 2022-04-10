@@ -32,11 +32,11 @@ public class LayStars : MonoBehaviour
 
             if (movingLeft)
             {
-                starSpawn = new Vector3(player.transform.position.x + 0.5f, Random.Range(-13f, -14f), 0f);
+                starSpawn = new Vector3(player.transform.position.x + 0.5f, Random.Range(-10f, -12f), 0f);
             }
             else
             {
-                starSpawn = new Vector3(player.transform.position.x - 0.5f, Random.Range(-13f, -14f), 0f);
+                starSpawn = new Vector3(player.transform.position.x - 0.5f, Random.Range(-10f, -12f), 0f);
             }
 
             tempStar.gameObject.transform.position = starSpawn;
