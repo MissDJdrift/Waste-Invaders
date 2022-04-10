@@ -27,7 +27,11 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         initialPos = transform.position;
+        RandomizeEnemies();
+    }
 
+    private void RandomizeEnemies()
+    {
         for (int i = 0; i < rows; i++)
         {
             Vector2 centerOffset = new Vector2((-HorizontalSpacing * (columns - 1)) * 0.5f, (-VerticalSpacing * (rows - 1)) * 0.5f);
@@ -35,7 +39,7 @@ public class EnemyController : MonoBehaviour
 
             for (int j = 0; j < columns; j++)
             {
-                Enemy enemy = Instantiate(prefabs[i], transform);
+                Enemy enemy = Instantiate(prefabs[Random.Range(0, prefabs.Length)], transform);
                 enemy.killed += EnemyDeath;
                 enemy.IncorrectHit += IncorrectlyHit;
 
@@ -68,7 +72,7 @@ public class EnemyController : MonoBehaviour
                 break;
             }
 
-            if (!bottomCheck && enemy.position.y <= Camera.main.ViewportToWorldPoint(Vector3.zero).y)
+            if (!bottomCheck && enemy.position.y <= player.transform.position.y)
             {
                 bottomCheck = true;
 
@@ -113,8 +117,10 @@ public class EnemyController : MonoBehaviour
 
         foreach (Transform invader in transform) 
         {
-            invader.gameObject.SetActive(true);
+            Destroy(invader.gameObject);
         }
+
+        RandomizeEnemies();
 
         bottomCheck = false;
     }
