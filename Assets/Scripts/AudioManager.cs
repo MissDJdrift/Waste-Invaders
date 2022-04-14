@@ -83,6 +83,20 @@ public class AudioManager : MonoBehaviour
             sound.source.Stop();
     }
 
+    public bool IsPlaying(string clipname)
+    {
+        Sound sound = Array.Find(sounds, dummySound => dummySound.clipName == clipname);
+        if (sound != null)
+        {
+            if (sound.source.isPlaying)
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+
     public void OnMusicSliderValueChange(float value)
     {
         if (!starting)

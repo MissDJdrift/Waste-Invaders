@@ -18,6 +18,10 @@ public sealed class GameManager : MonoBehaviour
     public GameObject HighScoresUI;
     public GameObject TutorialUI;
     public GameObject SettingsUI;
+    public GameObject CampusUI;
+    public GameObject RecyclingUI;
+    public GameObject AboutUI;
+    public GameObject StatTrackerUI;
     public EventSystem eventSystem;
     public Transform[] toggleOnGO;
     public GameObject TutorialObjects;
@@ -26,8 +30,23 @@ public sealed class GameManager : MonoBehaviour
     private int HighScore;
     public int lives { get; private set; }
     public bool TutorialActive { get; private set; }
+    public int Stage;
+    public int TintedEnemyChance;
 
     public AudioManager audioManager;
+
+    private KeyCode[] sequence = new KeyCode[]
+    {
+        KeyCode.Alpha1,
+        KeyCode.Alpha2,
+        KeyCode.Alpha3,
+        KeyCode.Alpha4,
+        KeyCode.Alpha5,
+        KeyCode.Alpha6,
+        KeyCode.Alpha7,
+        KeyCode.Alpha8
+    };
+    private int sequenceIndex;
 
     // Find references
     private void Awake()
@@ -45,6 +64,7 @@ public sealed class GameManager : MonoBehaviour
 
         audioManager.Play("MenuMusic");
         audioManager.Stop("Level1Music");
+        audioManager.Stop("Level2Music");
 
         MainMenu();
     }
@@ -60,12 +80,28 @@ public sealed class GameManager : MonoBehaviour
             }
         }
 
+        if (CreditsUI.activeSelf)
+        {
+            if (Input.GetKeyDown(sequence[sequenceIndex]))
+            {
+                if (++sequenceIndex == sequence.Length)
+                {
+                    sequenceIndex = 0;
+                    StatTrackerUI.SetActive(true);
+                    CreditsUI.SetActive(false);
+                }
+            }
+            else if (Input.anyKeyDown)
+                sequenceIndex = 0;
+        }
+
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (InGameUI.activeSelf)
             {
                 audioManager.Play("MenuMusic");
                 audioManager.Stop("Level1Music");
+                audioManager.Stop("Level2Music");
             }
             MainMenu();
         }
@@ -84,6 +120,10 @@ public sealed class GameManager : MonoBehaviour
         HighScoresUI.SetActive(false);
         TutorialUI.SetActive(false);
         SettingsUI.SetActive(false);
+        CampusUI.SetActive(false);
+        RecyclingUI.SetActive(false);
+        AboutUI.SetActive(false);
+        StatTrackerUI.SetActive(false);
 
         eventSystem.SetSelectedGameObject(MenuUI.GetComponentInChildren<Button>().gameObject, new BaseEventData(eventSystem));
     }
@@ -102,12 +142,16 @@ public sealed class GameManager : MonoBehaviour
         MenuUI.SetActive(false);
         TutorialUI.SetActive(false);
 
+        Stage = 1;
+        TintedEnemyChance = 0;
+
         SetScore(0);
         SetLives(3);
         NewRound();
 
         audioManager.Stop("MenuMusic");
         audioManager.Play("Level1Music");
+        audioManager.Stop("Level2Music");
 
         StartCoroutine(Countdown());
     }
@@ -147,6 +191,22 @@ public sealed class GameManager : MonoBehaviour
             else if (SettingsUI.activeSelf)
             {
                 eventSystem.SetSelectedGameObject(SettingsUI.GetComponentInChildren<Button>().gameObject, new BaseEventData(eventSystem));
+            }
+            else if (CampusUI.activeSelf)
+            {
+                eventSystem.SetSelectedGameObject(CampusUI.GetComponentInChildren<Button>().gameObject, new BaseEventData(eventSystem));
+            }
+            else if (RecyclingUI.activeSelf)
+            {
+                eventSystem.SetSelectedGameObject(RecyclingUI.GetComponentInChildren<Button>().gameObject, new BaseEventData(eventSystem));
+            }
+            else if (AboutUI.activeSelf)
+            {
+                eventSystem.SetSelectedGameObject(AboutUI.GetComponentInChildren<Button>().gameObject, new BaseEventData(eventSystem));
+            }
+            else if (StatTrackerUI.activeSelf)
+            {
+                eventSystem.SetSelectedGameObject(StatTrackerUI.GetComponentInChildren<Button>().gameObject, new BaseEventData(eventSystem));
             }
         }
         else
@@ -250,7 +310,22 @@ public sealed class GameManager : MonoBehaviour
         SetScore(score + enemy.score);
 
         if (enemyController.NumberKilled == enemyController.TotalEnemies)
+        {
+            if (TintedEnemyChance < 100)
+            {
+                TintedEnemyChance += 25;
+            }
+            else
+            {
+                if (!audioManager.IsPlaying("Level2Music"))
+                {
+                    audioManager.Stop("Level1Music");
+                    audioManager.Play("Level2Music");
+                }
+                Stage = 2;
+            }
             NewRound();
+        }
     }
 
     private void OnEnemyIncorrectlyHit(Enemy enemy)

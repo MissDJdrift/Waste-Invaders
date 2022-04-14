@@ -4,7 +4,8 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     public int score = 10;
-    public int EnemyType = 0;
+    public int Stage1EnemyType = 0;
+    public int Stage2EnemyType = 0;
 
     public Sprite[] animationImages;
     public float animationTime = 1.0f;
@@ -13,6 +14,8 @@ public class Enemy : MonoBehaviour
 
     public System.Action<Enemy> killed;
     public System.Action<Enemy> IncorrectHit;
+
+    public string EnemyName;
 
     private void Awake()
     {
@@ -40,13 +43,29 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
-            if (collision.gameObject.GetComponent<Projectile>().LaserType == EnemyType)
+            GameManager gameManager = GetComponentInParent<EnemyController>().gameManager;
+
+            if (gameManager.Stage == 1)
             {
-                killed?.Invoke(this);
+                if (collision.gameObject.GetComponent<Projectile>().LaserType == Stage1EnemyType)
+                {
+                    killed?.Invoke(this);
+                }
+                else
+                {
+                    IncorrectHit?.Invoke(this);
+                }
             }
-            else
+            else if (gameManager.Stage == 2)
             {
-                IncorrectHit?.Invoke(this);
+                if (collision.gameObject.GetComponent<Projectile>().LaserType == Stage2EnemyType)
+                {
+                    killed?.Invoke(this);
+                }
+                else
+                {
+                    IncorrectHit?.Invoke(this);
+                }
             }
         }
     }

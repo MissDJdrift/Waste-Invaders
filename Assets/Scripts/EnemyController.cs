@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public Enemy[] prefabs = new Enemy[5];
+    public Enemy[] Stage1Enemies = new Enemy[1];
+    public Enemy[] TintedEnemies = new Enemy[1];
+    public Enemy[] Stage2Enemies = new Enemy[1];
+
     public AnimationCurve Speed = new AnimationCurve();
     public Player player;
     public Vector3 direction { get; private set; } = Vector3.right;
@@ -23,11 +26,12 @@ public class EnemyController : MonoBehaviour
 
     private bool bottomCheck = false;
 
+    public GameManager gameManager;
+
     // Initial spawn of enemies
     private void Awake()
     {
         initialPos = transform.position;
-        RandomizeEnemies();
     }
 
     private void RandomizeEnemies()
@@ -39,7 +43,57 @@ public class EnemyController : MonoBehaviour
 
             for (int j = 0; j < columns; j++)
             {
-                Enemy enemy = Instantiate(prefabs[Random.Range(0, prefabs.Length)], transform);
+                Enemy enemy = new Enemy();
+                if (gameManager.Stage == 1)
+                {
+                    if (Random.Range(1, 101) <= gameManager.TintedEnemyChance)
+                    {
+                        enemy = Instantiate(TintedEnemies[Random.Range(0, TintedEnemies.Length)], transform);
+                        Color enemyColor = new Color();
+                        if (enemy.Stage1EnemyType == 1)
+                        {
+                            enemyColor = new Color(255f / 255f, 0f / 255f, 0f / 255f, 1);
+                        }
+                        else if (enemy.Stage1EnemyType == 2)
+                        {
+                            enemyColor = new Color(255f / 255f, 153f / 255f, 0f / 255f, 1);
+                        }
+                        else if (enemy.Stage1EnemyType == 3)
+                        {
+                            enemyColor = new Color(255f / 255f, 255f / 255f, 0f / 255f, 1);
+                        }
+                        else if (enemy.Stage1EnemyType == 4)
+                        {
+                            enemyColor = new Color(0f / 255f, 255f / 255f, 0f / 255f, 1);
+                        }
+                        else if (enemy.Stage1EnemyType == 5)
+                        {
+                            enemyColor = new Color(74f / 255f, 134f / 255f, 232f / 255f, 1);
+                        }
+                        else if (enemy.Stage1EnemyType == 6)
+                        {
+                            enemyColor = new Color(153f / 255f, 0f / 255f, 255f / 255f, 1);
+                        }
+                        else if (enemy.Stage1EnemyType == 7)
+                        {
+                            enemyColor = new Color(149f / 255f, 94f / 255f, 67f / 255f, 1);
+                        }
+                        else if (enemy.Stage1EnemyType == 8)
+                        {
+                            enemyColor = new Color(1f, 1f, 1f, 1);
+                        }
+
+                        enemy.GetComponent<SpriteRenderer>().color = enemyColor;
+                    }
+                    else
+                    {
+                        enemy = Instantiate(Stage1Enemies[Random.Range(0, Stage1Enemies.Length)], transform);
+                    }
+                }
+                else if (gameManager.Stage == 2)
+                {
+                    enemy = Instantiate(Stage2Enemies[Random.Range(0, Stage2Enemies.Length)], transform);
+                }
                 enemy.killed += EnemyDeath;
                 enemy.IncorrectHit += IncorrectlyHit;
 

@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
 
     public AudioManager audioManager;
 
+    public GameManager gameManager;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -147,55 +149,64 @@ public class Player : MonoBehaviour
 
         if (hit)
         {
-            int hitEnemy = hit.collider.gameObject.GetComponent<Enemy>().EnemyType - 1;
+            int hitEnemy = -1;
 
-            if (hitEnemy == 0)
+            if (gameManager.Stage == 1)
             {
-                neededWeaponText.text = "Plastic Type 1: PET";
-                //neededWeaponNumberText.text = "1";
-                neededWeaponImage.sprite = neededWeaponImages[1];
+                hitEnemy = hit.collider.gameObject.GetComponent<Enemy>().Stage1EnemyType - 1;
             }
-            else if (hitEnemy == 1)
+            else if (gameManager.Stage == 2)
             {
-                neededWeaponText.text = "Plastic Type 2: HDPE";
-                //neededWeaponNumberText.text = "2";
-                neededWeaponImage.sprite = neededWeaponImages[2];
+                hitEnemy = hit.collider.gameObject.GetComponent<Enemy>().Stage2EnemyType - 1;
             }
-            else if (hitEnemy == 2)
+
+            neededWeaponText.text = hit.collider.gameObject.GetComponent<Enemy>().EnemyName;
+            if (gameManager.Stage == 1)
             {
-                neededWeaponText.text = "Plastic Type 3: PVC";
-                //neededWeaponNumberText.text = "3";
-                neededWeaponImage.sprite = neededWeaponImages[3];
+                if (hitEnemy == 0)
+                {
+                    //neededWeaponNumberText.text = "1";
+                    neededWeaponImage.sprite = neededWeaponImages[1];
+                }
+                else if (hitEnemy == 1)
+                {
+                    //neededWeaponNumberText.text = "2";
+                    neededWeaponImage.sprite = neededWeaponImages[2];
+                }
+                else if (hitEnemy == 2)
+                {
+                    //neededWeaponNumberText.text = "3";
+                    neededWeaponImage.sprite = neededWeaponImages[3];
+                }
+                else if (hitEnemy == 3)
+                {
+                    //neededWeaponNumberText.text = "4";
+                    neededWeaponImage.sprite = neededWeaponImages[4];
+                }
+                else if (hitEnemy == 4)
+                {
+                    //neededWeaponNumberText.text = "5";
+                    neededWeaponImage.sprite = neededWeaponImages[5];
+                }
+                else if (hitEnemy == 5)
+                {
+                    //neededWeaponNumberText.text = "6";
+                    neededWeaponImage.sprite = neededWeaponImages[6];
+                }
+                else if (hitEnemy == 6)
+                {
+                    //neededWeaponNumberText.text = "7";
+                    neededWeaponImage.sprite = neededWeaponImages[7];
+                }
+                else if (hitEnemy == 7)
+                {
+                    //neededWeaponNumberText.text = "8";
+                    neededWeaponImage.sprite = neededWeaponImages[8];
+                }
             }
-            else if (hitEnemy == 3)
+            else if (gameManager.Stage == 2)
             {
-                neededWeaponText.text = "Plastic Type 4: LDPE";
-                //neededWeaponNumberText.text = "4";
-                neededWeaponImage.sprite = neededWeaponImages[4];
-            }
-            else if (hitEnemy == 4)
-            {
-                neededWeaponText.text = "Plastic Type 5: PP";
-                //neededWeaponNumberText.text = "5";
-                neededWeaponImage.sprite = neededWeaponImages[5];
-            }
-            else if (hitEnemy == 5)
-            {
-                neededWeaponText.text = "Plastic Type 6: PS";
-                //neededWeaponNumberText.text = "6";
-                neededWeaponImage.sprite = neededWeaponImages[6];
-            }
-            else if (hitEnemy == 6)
-            {
-                neededWeaponText.text = "Plastic Type 7";
-                //neededWeaponNumberText.text = "7";
-                neededWeaponImage.sprite = neededWeaponImages[7];
-            }
-            else if (hitEnemy == 7)
-            {
-                neededWeaponText.text = "Trash";
-                //neededWeaponNumberText.text = "8";
-                neededWeaponImage.sprite = neededWeaponImages[8];
+                neededWeaponImage.sprite = hit.collider.gameObject.GetComponent<SpriteRenderer>().sprite;
             }
         }
         else
