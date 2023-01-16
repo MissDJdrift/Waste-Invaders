@@ -50,35 +50,36 @@ public class EnemyController : MonoBehaviour
                     {
                         enemy = Instantiate(TintedEnemies[Random.Range(0, TintedEnemies.Length)], transform);
                         Color enemyColor = new Color();
-                        if (enemy.Stage1EnemyType == 1)
+                        if (enemy.Stage1EnemyType[0] == 1)
                         {
                             enemyColor = new Color(255f / 255f, 0f / 255f, 0f / 255f, 1);
                         }
-                        else if (enemy.Stage1EnemyType == 2)
+                        else if (enemy.Stage1EnemyType[0] == 2)
                         {
                             enemyColor = new Color(255f / 255f, 153f / 255f, 0f / 255f, 1);
                         }
-                        else if (enemy.Stage1EnemyType == 3)
+                        else if (enemy.Stage1EnemyType[0] == 3)
                         {
                             enemyColor = new Color(255f / 255f, 255f / 255f, 0f / 255f, 1);
                         }
-                        else if (enemy.Stage1EnemyType == 4)
+                        else if (enemy.Stage1EnemyType[0] == 4)
                         {
                             enemyColor = new Color(0f / 255f, 255f / 255f, 0f / 255f, 1);
                         }
-                        else if (enemy.Stage1EnemyType == 5)
+                        else if (enemy.Stage1EnemyType[0] == 5)
                         {
                             enemyColor = new Color(74f / 255f, 134f / 255f, 232f / 255f, 1);
                         }
-                        else if (enemy.Stage1EnemyType == 6)
+                        else if (enemy.Stage1EnemyType[0] == 6)
                         {
                             enemyColor = new Color(153f / 255f, 0f / 255f, 255f / 255f, 1);
+                            enemy.GetComponent<Enemy>().Stage1EnemyType[0] = 8;
                         }
-                        else if (enemy.Stage1EnemyType == 7)
+                        else if (enemy.Stage1EnemyType[0] == 7)
                         {
-                            enemyColor = new Color(149f / 255f, 94f / 255f, 67f / 255f, 1);
+                            enemyColor = new Color(232f / 255f, 202f / 255f, 142f / 255f, 1);
                         }
-                        else if (enemy.Stage1EnemyType == 8)
+                        else if (enemy.Stage1EnemyType[0] == 8)
                         {
                             enemyColor = new Color(1f, 1f, 1f, 1);
                         }
@@ -154,11 +155,17 @@ public class EnemyController : MonoBehaviour
         enemy.gameObject.SetActive(false);
         NumberKilled++;
         killed(enemy);
+
+        if (enemy.PopUpMessageInt > 0)
+        {
+            gameManager.IndividualPopUpMessage(enemy);
+        }
     }
 
     private void IncorrectlyHit(Enemy enemy)
     {
         player.IncorrectHit();
+        gameManager.IncorrectPopUpMessage(enemy);
         IncorrectHit(enemy);
     }
 

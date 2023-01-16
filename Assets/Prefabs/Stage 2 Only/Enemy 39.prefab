@@ -147,9 +147,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 0
-  Stage2EnemyType: 4
+  Stage1EnemyType: 00000000
+  Stage2EnemyType: 06000000
   animationImages:
   - {fileID: 21300000, guid: 10405c3807b2156479780705d21fb302, type: 3}
   animationTime: 1
-  EnemyName: Envelope
+  EnemyName: Padded Envelope
+  BonusHit: 0
+  BonusHitTypes: 
+  PopUpMessageInt: 0

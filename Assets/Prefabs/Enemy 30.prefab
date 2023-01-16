@@ -147,9 +147,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 8
-  Stage2EnemyType: 7
+  Stage1EnemyType: 08000000
+  Stage2EnemyType: 0600000007000000
   animationImages:
   - {fileID: 21300000, guid: d514a434ce0c4de4981faf1230e4743b, type: 3}
   animationTime: 1
   EnemyName: Clay Vase
+  BonusHit: 1
+  BonusHitTypes: 07000000

@@ -147,9 +147,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 5
-  Stage2EnemyType: 8
+  Stage1EnemyType: 05000000
+  Stage2EnemyType: 020000000500000008000000
   animationImages:
   - {fileID: 21300000, guid: 68d590aa1728d0d4eb2acd4763bdf65b, type: 3}
   animationTime: 1
   EnemyName: Pill Bottle
+  BonusHit: 1
+  BonusHitTypes: 08000000
+  PopUpMessageInt: 1

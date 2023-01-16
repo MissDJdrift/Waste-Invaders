@@ -22,7 +22,6 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-
         foreach (Sound item in sounds)
         {
             item.source = gameObject.AddComponent<AudioSource>();
@@ -44,15 +43,8 @@ public class AudioManager : MonoBehaviour
                 item.source.Play();
         }
 
-        if (!PlayerPrefs.HasKey("Music Volume"))
-        {
-            PlayerPrefs.SetFloat("Music Volume", 1);
-        }
-
-        if (!PlayerPrefs.HasKey("SFX Volume"))
-        {
-            PlayerPrefs.SetFloat("SFX Volume", 1);
-        }
+        PlayerPrefs.SetFloat("Music Volume", 1);
+        PlayerPrefs.SetFloat("SFX Volume", 1);
 
         MusicVolume = PlayerPrefs.GetFloat("Music Volume");
         SFXVolume = PlayerPrefs.GetFloat("SFX Volume");
@@ -115,6 +107,18 @@ public class AudioManager : MonoBehaviour
             SFXMixerGroup.audioMixer.SetFloat("SFX Volume", Mathf.Log10(SFXVolume) * 20);
             PlayerPrefs.SetFloat("SFX Volume", SFXVolume);
             Play("Shoot1");
+        }
+    }
+
+    public void ToggleMusic(bool MusicMuted)
+    {
+        if (MusicMuted)
+        {
+            MusicSlider.value = 0;
+        }
+        else
+        {
+            MusicSlider.value = 1;
         }
     }
 }

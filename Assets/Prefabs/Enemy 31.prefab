@@ -147,8 +147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 5
-  Stage2EnemyType: 5
+  Stage1EnemyType: 05000000
+  Stage2EnemyType: 05000000
   animationImages:
   - {fileID: 21300000, guid: 650d434631345b4428f2d73ba0e38183, type: 3}
   animationTime: 1

@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class Enemy : MonoBehaviour
 {
     public int score = 10;
-    public int Stage1EnemyType = 0;
-    public int Stage2EnemyType = 0;
+    public int[] Stage1EnemyType;
+    public int[] Stage2EnemyType;
 
     public Sprite[] animationImages;
     public float animationTime = 1.0f;
@@ -16,15 +16,22 @@ public class Enemy : MonoBehaviour
     public System.Action<Enemy> IncorrectHit;
 
     public string EnemyName;
+    private bool hitCheck;
+
+    public bool BonusHit = false;
+    public int[] BonusHitTypes;
+
+    public int PopUpMessageInt = 0;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        hitCheck = false;
     }
 
     private void Start()
     {
-        InvokeRepeating(nameof(AnimateEnemy), animationTime, animationTime);
+        //InvokeRepeating(nameof(AnimateEnemy), animationTime, animationTime);
     }
 
     private void AnimateEnemy()
@@ -47,22 +54,48 @@ public class Enemy : MonoBehaviour
 
             if (gameManager.Stage == 1)
             {
-                if (collision.gameObject.GetComponent<Projectile>().LaserType == Stage1EnemyType)
+                for (int i = 0; i < Stage1EnemyType.Length; i++)
                 {
-                    killed?.Invoke(this);
+                    if (collision.gameObject.GetComponent<Projectile>().LaserType == Stage1EnemyType[i])
+                    {
+                        killed?.Invoke(this);
+                        hitCheck = true;
+                    }
                 }
-                else
+                if (!hitCheck)
                 {
                     IncorrectHit?.Invoke(this);
                 }
             }
             else if (gameManager.Stage == 2)
             {
-                if (collision.gameObject.GetComponent<Projectile>().LaserType == Stage2EnemyType)
+                int LaserType = collision.gameObject.GetComponent<Projectile>().LaserType;
+
+                if (LaserType == 6)
+                    LaserType = 8;
+                else if (LaserType == 8)
+                    LaserType = 6;
+
+                for (int i = 0; i < Stage2EnemyType.Length; i++)
                 {
-                    killed?.Invoke(this);
+                    if (LaserType == Stage2EnemyType[i])
+                    {
+                        if (BonusHit)
+                        {
+                            for (int j = 0; j < BonusHitTypes.Length; j++)
+                            {
+                                if (LaserType == BonusHitTypes[j])
+                                {
+                                    score *= 2;
+                                }
+                            }
+                        }
+
+                        killed?.Invoke(this);
+                        hitCheck = true;
+                    }
                 }
-                else
+                if (!hitCheck)
                 {
                     IncorrectHit?.Invoke(this);
                 }

@@ -147,9 +147,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 7
-  Stage2EnemyType: 8
+  Stage1EnemyType: 07000000
+  Stage2EnemyType: 0200000008000000
   animationImages:
   - {fileID: 21300000, guid: a69c0130fe855ef4b8144bbf3f07da24, type: 3}
   animationTime: 1
   EnemyName: Tetrapack
+  BonusHit: 1
+  BonusHitTypes: 08000000
+  PopUpMessageInt: 4

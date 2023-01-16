@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,8 +21,11 @@ public class Player : MonoBehaviour
     public bool movingLeft;
 
     public int selectedWeapon = 0;
-    public int Health = 8;
+    public int Health;
+    public int maxHealth;
     public Slider healthSlider;
+
+    public bool flashing;
 
     public bool laserActive { get; private set; }
 
@@ -41,6 +45,8 @@ public class Player : MonoBehaviour
 
     public GameManager gameManager;
 
+    public bool Tutorial = true;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -56,78 +62,78 @@ public class Player : MonoBehaviour
     {
         Vector3 position = transform.position;
 
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < -0.25f)
         {
             position.x -= speed * Time.deltaTime;
             movingLeft = true;
             moving = true;
         }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0.25f)
         {
             position.x += speed * Time.deltaTime;
             movingLeft = false;
             moving = true;
         }
 
-        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow))
+        if (Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") == 0)
         {
             moving = false;
         }
-        else if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow))
+        else if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetAxis("Horizontal") == 0)
         {
             moving = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) 
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Joystick1Button0))
         {
             selectedWeapon = 0;
             if (!laserActive)
                 audioManager.Play("Shoot1");
             Shoot();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Joystick1Button1))
         {
             selectedWeapon = 1;
             if (!laserActive)
                 audioManager.Play("Shoot2");
             Shoot();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
             selectedWeapon = 2;
             if (!laserActive)
-                audioManager.Play("Shoot3");
+                audioManager.Play("Shoot2");
             Shoot();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
             selectedWeapon = 3;
             if (!laserActive)
                 audioManager.Play("Shoot4");
             Shoot();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        else if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Joystick1Button4))
         {
             selectedWeapon = 4;
             if (!laserActive)
                 audioManager.Play("Shoot5");
             Shoot();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha6))
+        else if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Joystick1Button5))
         {
             selectedWeapon = 5;
             if (!laserActive)
                 audioManager.Play("Shoot6");
             Shoot();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha7))
+        else if (Input.GetKeyDown(KeyCode.Alpha7) || Input.GetKeyDown(KeyCode.Joystick1Button6))
         {
             selectedWeapon = 6;
             if (!laserActive)
                 audioManager.Play("Shoot7");
             Shoot();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha8))
+        else if (Input.GetKeyDown(KeyCode.Alpha8) || Input.GetKeyDown(KeyCode.Joystick1Button7))
         {
             selectedWeapon = 7;
             if (!laserActive)
@@ -153,60 +159,81 @@ public class Player : MonoBehaviour
 
             if (gameManager.Stage == 1)
             {
-                hitEnemy = hit.collider.gameObject.GetComponent<Enemy>().Stage1EnemyType - 1;
+                hitEnemy = hit.collider.gameObject.GetComponent<Enemy>().Stage1EnemyType[0] - 1;
             }
             else if (gameManager.Stage == 2)
             {
-                hitEnemy = hit.collider.gameObject.GetComponent<Enemy>().Stage2EnemyType - 1;
+                hitEnemy = hit.collider.gameObject.GetComponent<Enemy>().Stage2EnemyType[0] - 1;
             }
 
-            neededWeaponText.text = hit.collider.gameObject.GetComponent<Enemy>().EnemyName;
-            if (gameManager.Stage == 1)
+            if (hit.collider.gameObject.GetComponent<Enemy>() != null || hit.collider.gameObject.GetComponent<TutorialEnemyScript>() != null)
             {
-                if (hitEnemy == 0)
+                if (hit.collider.gameObject.GetComponent<Enemy>())
+                    neededWeaponText.text = hit.collider.gameObject.GetComponent<Enemy>().EnemyName;
+                else
                 {
-                    //neededWeaponNumberText.text = "1";
-                    neededWeaponImage.sprite = neededWeaponImages[1];
+                    neededWeaponText.text = hit.collider.gameObject.GetComponent<TutorialEnemyScript>().EnemyName;
+                    hitEnemy = hit.collider.gameObject.GetComponent<TutorialEnemyScript>().Stage1EnemyType - 1;
                 }
-                else if (hitEnemy == 1)
+
+                if (gameManager.Stage <= 1)
                 {
-                    //neededWeaponNumberText.text = "2";
-                    neededWeaponImage.sprite = neededWeaponImages[2];
+                    /*if (hitEnemy == 0)
+                    {
+                        //neededWeaponNumberText.text = "1";
+                        neededWeaponImage.sprite = neededWeaponImages[1];
+                    }
+                    else if (hitEnemy == 1)
+                    {
+                        //neededWeaponNumberText.text = "2";
+                        neededWeaponImage.sprite = neededWeaponImages[2];
+                    }
+                    else if (hitEnemy == 2)
+                    {
+                        //neededWeaponNumberText.text = "3";
+                        neededWeaponImage.sprite = neededWeaponImages[3];
+                    }
+                    else if (hitEnemy == 3)
+                    {
+                        //neededWeaponNumberText.text = "4";
+                        neededWeaponImage.sprite = neededWeaponImages[4];
+                    }
+                    else if (hitEnemy == 4)
+                    {
+                        //neededWeaponNumberText.text = "5";
+                        neededWeaponImage.sprite = neededWeaponImages[5];
+                    }
+                    else if (hitEnemy == 5)
+                    {
+                        //neededWeaponNumberText.text = "6";
+                        neededWeaponImage.sprite = neededWeaponImages[6];
+                    }
+                    else if (hitEnemy == 6)
+                    {
+                        //neededWeaponNumberText.text = "7";
+                        neededWeaponImage.sprite = neededWeaponImages[7];
+                    }
+                    else if (hitEnemy == 7)
+                    {
+                        //neededWeaponNumberText.text = "8";
+                        neededWeaponImage.sprite = neededWeaponImages[8];
+                    }
+                    else*/
+                    if (hit.collider.gameObject.GetComponent<Enemy>())
+                    {
+                        neededWeaponImage.sprite = hit.collider.gameObject.GetComponent<Enemy>().animationImages[0];
+                    }
+                    else if (hit.collider.gameObject.GetComponent<TutorialEnemyScript>())
+                    {
+                        neededWeaponImage.sprite = hit.collider.gameObject.GetComponent<TutorialEnemyScript>().animationImages[0];
+                    }
+                    //neededWeaponImage.color = hit.collider.gameObject.GetComponent<SpriteRenderer>().color;
                 }
-                else if (hitEnemy == 2)
+                else if (gameManager.Stage == 2)
                 {
-                    //neededWeaponNumberText.text = "3";
-                    neededWeaponImage.sprite = neededWeaponImages[3];
+                    neededWeaponImage.sprite = hit.collider.gameObject.GetComponent<Enemy>().animationImages[0];
+                    //neededWeaponImage.color = Color.white;
                 }
-                else if (hitEnemy == 3)
-                {
-                    //neededWeaponNumberText.text = "4";
-                    neededWeaponImage.sprite = neededWeaponImages[4];
-                }
-                else if (hitEnemy == 4)
-                {
-                    //neededWeaponNumberText.text = "5";
-                    neededWeaponImage.sprite = neededWeaponImages[5];
-                }
-                else if (hitEnemy == 5)
-                {
-                    //neededWeaponNumberText.text = "6";
-                    neededWeaponImage.sprite = neededWeaponImages[6];
-                }
-                else if (hitEnemy == 6)
-                {
-                    //neededWeaponNumberText.text = "7";
-                    neededWeaponImage.sprite = neededWeaponImages[7];
-                }
-                else if (hitEnemy == 7)
-                {
-                    //neededWeaponNumberText.text = "8";
-                    neededWeaponImage.sprite = neededWeaponImages[8];
-                }
-            }
-            else if (gameManager.Stage == 2)
-            {
-                neededWeaponImage.sprite = hit.collider.gameObject.GetComponent<SpriteRenderer>().sprite;
             }
         }
         else
@@ -257,15 +284,38 @@ public class Player : MonoBehaviour
 
     public void IncorrectHit()
     {
+        StartCoroutine(FlashPlayer());
         Health -= 1;
         if (Health == 0)
         {
+            spriteRenderer.color = new Color(1, 1, 1, 1);
+            flashing = false;
+            StopCoroutine(FlashPlayer());
             if (killed != null)
                 killed.Invoke();
         }
         damaged = true;
 
-        healthSlider.value = Health; 
+        healthSlider.value = Health;
+    }
+
+    private IEnumerator FlashPlayer()
+    {
+        if (flashing)
+            yield return null;
+        else
+        {
+            flashing = true;
+            for (int i = 0; i < 5; i++)
+            {
+                spriteRenderer.color = new Color(1, 0, 0, 1);
+                yield return new WaitForSeconds(0.1f);
+                spriteRenderer.color = new Color(1, 1, 1, 1);
+                yield return new WaitForSeconds(0.1f);
+            }
+            flashing = false;
+            yield return null;
+        }
     }
 
     private void AnimatePlayer()
@@ -302,5 +352,12 @@ public class Player : MonoBehaviour
         {
             spriteRenderer.sprite = idleSprite;
         }
+    }
+
+    private void OnDisable()
+    {
+        spriteRenderer.color = new Color(1, 1, 1, 1);
+        flashing = false;
+        StopCoroutine(FlashPlayer());
     }
 }

@@ -147,9 +147,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 10
-  Stage1EnemyType: 0
-  Stage2EnemyType: 8
+  Stage1EnemyType: 00000000
+  Stage2EnemyType: 0200000008000000
   animationImages:
   - {fileID: 21300000, guid: de28f016b7ef3f34398e9fa6bb74c357, type: 3}
   animationTime: 1
   EnemyName: Beer Bottle
+  BonusHit: 1
+  BonusHitTypes: 08000000
+  PopUpMessageInt: 1
